@@ -85,7 +85,7 @@ def get_accuracy(A2, Y):
     predictions = np.argmax(A2, axis=0)
     return np.mean(predictions == Y) * 100
 
-def train(X, Y, iterations):
+def gradient_descent(X, Y, iterations):
     W1, b1, W2, b2 = params()
     costs = []
     accuracies = []
@@ -126,7 +126,7 @@ def train(X, Y, iterations):
     return W1, b1, W2, b2
 
 # %%
-trainedWeights = train(X, y, 5000)
+trained_weights = gradient_descent(X, y, 5000)
 
 # %%
 def predict(i, W1, b1, W2, b2):
@@ -138,6 +138,6 @@ def predict(i, W1, b1, W2, b2):
     print("Prediction:", int(prediction))
     print("Label:", int(label))
 
-predict(randint(1, 10000), *trainedWeights)
+predict(randint(1, 10000), *trained_weights)
 
 
