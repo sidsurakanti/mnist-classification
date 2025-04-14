@@ -56,11 +56,11 @@ def forward_pass(W1, b1, W2, b2, X):
 
 # %%
 def cost(A2, y):
-    return (A2 - one_hot(y))**2 * 1/m
+    return -np.mean(np.sum(one_hot(y) * np.log(A2 + 1e-9), axis=1))
 
 def backward_pass(A2, Z2, A1, Z1, W2, W1, y):
     # chain rule dC/dW2, dC/db2
-    dZ2 = 2 * (A2 - one_hot(y)) # dC wrt dZ2
+    dZ2 = A2 - one_hot(y) # dC wrt dZ2
     dW2 = dZ2 @ A1.T / m # (10, m) * (m, 10).T => (10, 10), dZ2 wrt dW2
     db2 = np.sum(dZ2, axis=1, keepdims=True) / m # (10, 1)
 
@@ -79,26 +79,54 @@ def update_params(dW1, db1, dW2, db2, W2, b2, W1, b1):
     W1 -= dW1 * alpha
     b1 -= db1 * alpha
 
-    return W1, b1, W2, b1
+    return W1, b1, W2, b2
 
 def get_accuracy(A2, Y):
     predictions = np.argmax(A2, axis=0)
-    return np.mean(predictions == y) * 100
+    return np.mean(predictions == Y) * 100
 
-def gradient_descent(X, Y, iterations):
+def train(X, Y, iterations):
     W1, b1, W2, b2 = params()
+    costs = []
+    accuracies = []
     for i in range(iterations):
         A2, Z2, A1, Z1 = forward_pass(W1, b1, W2, b2, X)
         dW1, db1, dW2, db2 = backward_pass(A2, Z2, A1, Z1, W2, W1, Y)
         W1, b1, W2, b2 = update_params(dW1, db1, dW2, db2, W2, b2, W1, b1)
+        
 
-        if i % 50 == 0:
+        if i % 100 == 0:
+            cost_i = cost(A2, Y)
+            accuracy_i = round(get_accuracy(A2, Y), 2)
+            costs.append(cost_i)
+            accuracies.append(accuracy_i)
             print("Iteration:", i)
-            print("Accuracy:", round(get_accuracy(A2, Y), 2))
+            print(f"Accuracy: {accuracy_i}%")
+            print("Cost:", round(cost_i))
+    
+    iters = range(0, iterations, 100)
+
+
+    plt.subplot(211)
+    plt.title("Cost")
+    plt.ylabel("Cost")
+    plt.xlabel("Iterations")
+    plt.plot(iters, costs, color="red")
+    
+    plt.subplot(212)
+    plt.title("Accuracy")
+    plt.ylabel("Accuracy")
+    plt.xlabel("Iterations")
+    plt.plot(iters, accuracies)
+
+    plt.suptitle("Results")
+    plt.tight_layout()
+    plt.show()
+
     return W1, b1, W2, b2
 
 # %%
-trainedWeights = gradient_descent(X, y, 10000)
+trainedWeights = train(X, y, 5000)
 
 # %%
 def predict(i, W1, b1, W2, b2):
