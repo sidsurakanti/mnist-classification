@@ -30,7 +30,7 @@ Run the script or Jupyter notebook to train the model and see results.
 
 ### Installation
 ```bash
-git clone https://github.com/sidsurakanti/calculator.git
+git clone https://github.com/sidsurakanti/mnist-digit-recog.git
 cd /path/to/project/
 pip install -r requirements.txt
 ```
