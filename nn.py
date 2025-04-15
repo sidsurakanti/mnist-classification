@@ -21,6 +21,7 @@ test = test.T
 y_test, X_test = test[0], test[1:].T / 255.0
 
 # %%
+# init parameters 
 def params():
     W1 = np.random.rand(10, 784) - 0.5
     b1 = np.random.rand(10, 1) - 0.5
@@ -29,6 +30,7 @@ def params():
 
     return W1, b1, W2, b2
 
+## HELPERS
 def ReLU(Z):
     return np.maximum(0, Z)
 
@@ -60,7 +62,7 @@ def cost(A2, y):
 
 def backward_pass(A2, Z2, A1, Z1, W2, W1, y):
     # chain rule dC/dW2, dC/db2
-    dZ2 = A2 - one_hot(y) # dC wrt dZ2
+    dZ2 = A2 - one_hot(y) # dC wrt dZ2 => (10, m)
     dW2 = dZ2 @ A1.T / m # (10, m) * (m, 10).T => (10, 10), dZ2 wrt dW2
     db2 = np.sum(dZ2, axis=1, keepdims=True) / m # (10, 1)
 
@@ -105,7 +107,6 @@ def gradient_descent(X, Y, iterations):
             print("Cost:", round(cost_i))
     
     iters = range(0, iterations, 100)
-
 
     plt.subplot(211)
     plt.title("Cost")
