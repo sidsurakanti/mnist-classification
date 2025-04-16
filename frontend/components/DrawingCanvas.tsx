@@ -98,26 +98,21 @@ export default function DrawCanvas({
 					onMouseDown={startDraw}
 					onMouseMove={draw}
 					onMouseUp={stopDraw}
-					style={{
-						border: "2px solid #444",
-						background: "black",
-						touchAction: "none",
-						borderRadius: "20px",
-					}}
+					className="shadow-md rounded-2xl border border-black bg-black"
 				/>
 			</div>
 
 			<div className="pt-2 flex justify-end gap-2">
 				<button
 					onClick={clearCanvas}
-					className="bg-gradient-to-r from-neutral-100 to-neutral-300 text-black border border-white rounded-full px-4 py-1 font-medium text-lg"
+					className="cursor-pointer bg-gradient-to-tr from-stone-100 to-stone-200 hover:from-red-200 hover:to-red-300 text-black border border-neutral-300 hover:border-red-300 shadow-md rounded-full px-4 py-1 text-lg transition-colors"
 				>
 					clear
 				</button>
 
 				<button
 					onClick={() => onFinish(image)}
-					className="bg-gradient-to-r from-neutral-100 to-neutral-300 text-black rounded-full px-4 py-1 font-medium text-lg"
+					className="cursor-pointer bg-gradient-to-tr from-stone-100 to-stone-200 hover:from-blue-200 hover:to-blue-300 text-black border border-neutral-300 hover:border-blue-300  shadow-md rounded-full px-4 py-1 text-lg transition-colors"
 				>
 					guess
 				</button>
