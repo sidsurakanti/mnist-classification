@@ -1,4 +1,4 @@
-from withtorch import Mnist
+from model import Mnist
 
 import torch
 
@@ -7,9 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 
-DEVICE = torch.accelerator.current_accelerator()
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = Mnist().to(DEVICE)
-model.load_state_dict(torch.load("mnist_weights.pth", weights_only=True))
+model.load_state_dict(torch.load("mnist_weights.pth", weights_only=True, map_location=DEVICE))
 model.eval()
 
 class Input(BaseModel):
@@ -20,7 +20,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000"], # for dev
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

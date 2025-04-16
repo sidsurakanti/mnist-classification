@@ -4,11 +4,14 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from torchvision.transforms.v2 import ToImage, ToDtype, RandomAffine
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+
+from model import Mnist
 
 # %%
-print(torch.cuda.is_available())
-print(torch.cuda.get_device_name())
+if __name__ == "__main__":
+  if torch.cuda.is_available():
+    print("Cuda device available:", torch.cuda.get_device_name())
 
 # %%
 data_aug = transforms.Compose([
@@ -32,8 +35,9 @@ testD = datasets.MNIST(root="data", train=False, download=True, transform=test_t
 
 # %%
 BATCH_SIZE = 128
-DEVICE = torch.accelerator.current_accelerator()
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+# change num_workers to 0 and pin memory to false if running on a mac
 train_DL = DataLoader(trainD, batch_size=BATCH_SIZE, shuffle=True, num_workers=8, pin_memory=True)
 test_DL = DataLoader(testD, batch_size=BATCH_SIZE, shuffle=True, num_workers=2, pin_memory=True)
 
@@ -45,29 +49,6 @@ for X, y in test_DL:
 # %%
 loss_fn = nn.CrossEntropyLoss()
 
-# %%
-class Mnist(nn.Module):
-  def __init__(self):
-    super().__init__()
-    self.flatten = nn.Flatten()
-    self.model = nn.Sequential(
-      nn.Linear(28*28, 256),
-      nn.ReLU(),
-      nn.Dropout(0.2),
-
-      nn.Linear(256, 256),
-      nn.ReLU(),
-      nn.Dropout(0.2),
-      
-      nn.Linear(256, 10)
-    )
-  
-  def forward(self, X):
-    X = self.flatten(X) # 28*28 images to (784, 1)
-    logits = self.model(X)
-    return logits
-
-# %%
 def accuracy(output, y):
   preds = torch.argmax(output, dim=1)
     # y (labels) == preds.argmax
