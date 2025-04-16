@@ -9,21 +9,25 @@ export default function DrawCanvas({
 }) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [drawing, setDrawing] = useState(false);
+	const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null);
 	const [image, setImage] = useState<number[][]>([[]]);
 
 	useEffect(() => {
-		const canvas = canvasRef.current as HTMLCanvasElement;
-		const ctx = canvas?.getContext("2d");
+		const canvas = canvasRef.current!;
+		const ctx = canvas.getContext("2d");
 
 		if (ctx) {
 			ctx.fillStyle = "black";
-			ctx.fillRect(0, 0, canvas!.width, canvas!.height);
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.lineWidth = 12.5;
+			ctx.lineCap = "round";
+			ctx.lineJoin = "round";
+			ctx.strokeStyle = "white";
 		}
 	}, []);
 
 	const getPos = (e: React.MouseEvent) => {
 		const rect = canvasRef.current!.getBoundingClientRect();
-
 		return {
 			x: e.clientX - rect.left,
 			y: e.clientY - rect.top,
@@ -32,11 +36,13 @@ export default function DrawCanvas({
 
 	const startDraw = (e: React.MouseEvent) => {
 		setDrawing(true);
-		draw(e);
+		const { x, y } = getPos(e);
+		setLastPos({ x, y });
 	};
 
 	const stopDraw = () => {
 		setDrawing(false);
+		setLastPos(null);
 
 		// downscale for model eval
 		const smallCanvas = document.createElement("canvas");
@@ -50,15 +56,12 @@ export default function DrawCanvas({
 		const pixels = imageData.data;
 
 		const grayscale: number[][] = [];
-
 		for (let i = 0; i < 28; i++) {
 			grayscale.push([]);
-
 			for (let j = 0; j < 28; j++) {
 				const index = (i * 28 + j) * 4;
-				const r = pixels[index];
+				const r = pixels[index]; // grayscale so we can just use red
 				const val = r / 255;
-
 				grayscale[i].push(val);
 			}
 		}
@@ -67,15 +70,19 @@ export default function DrawCanvas({
 	};
 
 	const draw = (e: React.MouseEvent) => {
-		if (!drawing) return;
+		if (!drawing || !canvasRef.current) return;
 
-		const ctx = canvasRef.current!.getContext("2d")!;
+		const ctx = canvasRef.current.getContext("2d")!;
 		const { x, y } = getPos(e);
 
-		ctx.fillStyle = "white";
-		ctx.beginPath();
-		ctx.arc(x, y, 10, 0, 2 * Math.PI);
-		ctx.fill();
+		if (lastPos) {
+			ctx.beginPath();
+			ctx.moveTo(lastPos.x, lastPos.y);
+			ctx.quadraticCurveTo(lastPos.x, lastPos.y, x, y);
+			ctx.stroke();
+		}
+
+		setLastPos({ x, y });
 	};
 
 	const clearCanvas = () => {
@@ -98,6 +105,7 @@ export default function DrawCanvas({
 					onMouseDown={startDraw}
 					onMouseMove={draw}
 					onMouseUp={stopDraw}
+					onMouseLeave={stopDraw}
 					className="shadow-md rounded-2xl border border-black bg-black"
 				/>
 			</div>
