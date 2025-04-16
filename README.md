@@ -2,8 +2,12 @@
 MNIST digit classifier built with just NumPy and Math. It also has a Pytorch + a realtime web implementation using FastAPI and Next.js. 
 
 <img src="/assets/mnistdemo.gif">
-<img src="/performance.png">
-<img src="/confusion_matrix.png">
+<table>
+  <tr>
+    <td><img src="/performance.png" width="400px"></td>
+    <td><img src="/confusion_matrix.png" width="400px"></td>
+  </tr>
+</table>
 
 ## What I learned
 
