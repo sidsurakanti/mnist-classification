@@ -11,13 +11,15 @@ MNIST digit classifier built with just NumPy and Math. It also has a Pytorch + a
 
 ## What I learned
 
-- How to build a neural net from scratch  
+- How to implement a neural net from scratch  
 - Forward and backward propagation using pure math
 - Vectorized operations with NumPy  
 - Loss functions, softmax, and gradient descent
-- Data normalization and preprocessing 
+- Data normalization, preprocessing, and augumentation
+- Visualizing model performance (loss, accuracy, confusion matrix)
+- Optimizing data pipeline
 - Pytorch
-- Model deployment with FastAPI
+- Full-stack integration with FastAPI and Next.js
 
 ## Stack
 
@@ -36,21 +38,34 @@ Play around with the project w/ demo.py or view the demo web app locally.
 
 ### Prerequisites
 
-- Python 3.x  
+- Python 3.10+ 
 - pip
 - Node.js 18+
 - npm
+- PyTorch with CUDA
 
+
+```bash
+# run to check
+python --version
+node -v
+pip --version
+```
 
 ### Installation
+1. Clone the repo
 ```bash
 git clone https://github.com/sidsurakanti/mnist-digit-recog.git
 cd /path/to/project/
-
+```
+2. Setup the model
+```bash
 # backend setup
 pip install -r requirements.txt
 fastapi dev predict.py
-
+```
+3. Start up the website
+```bash
 # frontend setup
 cd frontend
 npm install
@@ -66,5 +81,10 @@ The app should now be live on http://localhost:3000!
 - [x] Visualize accuracy/loss  
 - [X] Rebuild using Pytorch
 - [X] Add GUI to draw digits and classify in real-time 
+- [X] Improve digit preprocessing for the HTML canvas
+- [ ] Dockerize model
 - [ ] Deploy online
-- [ ] Improve digit preprocessing for the HTML canvas
+
+## Contributing
+
+Pull requests are welcome! Feel free to open an issue or suggestion. 
