@@ -1,6 +1,10 @@
 ## Overview
 MNIST digit classifier built with just NumPy and Math. It also has a Pytorch + a realtime web implementation using FastAPI and Next.js. 
 
+<img src="/assets/mnistdemo.gif">
+<img src="/performance.png">
+<img src="/confusion_matrix.png">
+
 ## What I learned
 
 - How to build a neural net from scratch  
