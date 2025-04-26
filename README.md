@@ -43,10 +43,10 @@ Play around with the project w/ demo.py or view the demo web app locally.
 - Node.js 18+
 - npm
 - PyTorch with CUDA
-
+- Git w/ LFS (if you want to run barebones NN)
 
 ```bash
-# run to check
+# check versions
 python --version
 node -v
 pip --version
@@ -57,6 +57,7 @@ pip --version
 ```bash
 git clone https://github.com/sidsurakanti/mnist-digit-recog.git
 cd /path/to/project/
+git lfs pull # pull tracked mnist files for nn or download mnist and replace /dataset/ 
 ```
 2. Setup the model
 ```bash
