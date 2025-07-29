@@ -53,9 +53,15 @@ pip --version
 ```
 
 ### Installation
+0. Setup 
+```bash
+python3 -m venv venv
+# sudo apt install git-lfs (if you dont have it)
+git lfs install
+```
 1. Clone the repo
 ```bash
-git clone https://github.com/sidsurakanti/mnist-digit-recog.git
+git clone https://github.com/sidsurakanti/mnist-classification.git
 cd /path/to/project/
 git lfs pull # pull tracked mnist files for nn or download mnist and replace /dataset/ 
 ```
@@ -84,8 +90,8 @@ The app should now be live on http://localhost:3000!
 - [X] Add GUI to draw digits and classify in real-time 
 - [X] Improve digit preprocessing for the HTML canvas
 - [ ] Dockerize model
-- [ ] Deploy online
+- [X] Deploy online
 
 ## Contributing
 
-Pull requests are welcome! Feel free to open an issue or suggestion. 
+Pull requests are welcome! Feel free to open an issue or suggestion.  (be fr rn no one is pr'ing this)

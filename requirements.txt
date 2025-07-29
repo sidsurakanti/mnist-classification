@@ -2,6 +2,8 @@ numpy
 matplotlib
 pandas
 torch
+notebook
 torchvision
 fastapi
 scikit-learn
+
